@@ -1,0 +1,63 @@
+schema: spec-driven
+
+context: |
+  Platform: Android Native single-module app (:app)
+  Language & Toolchain: Kotlin 2.2.10, AGP 9.2.1, Gradle 9.4.1, JVM 21, compileSdk 36 (extension 1), minSdk 24, targetSdk 36
+  UI: Jetpack Compose (BOM 2026.02.01) with Material 3, Material You theming, Compose Compiler Kotlin 2.2.10
+  Architecture: Clean Architecture / Android modern architecture (MVI/MVVM), Activity Compose 1.13.0, Lifecycle Runtime KTX 2.11.0
+  Testing: JUnit 4 host unit tests (:app:testDebugUnitTest), AndroidX Test runner (AndroidJUnit4), Espresso 3.7.0, Compose UI Test JUnit 4
+
+testing:
+  strict_tdd: true
+  test_runner:
+    command: "./gradlew testDebugUnitTest"
+    framework: "JUnit 4"
+  layers:
+    unit:
+      available: true
+      tool: "JUnit 4"
+    integration:
+      available: true
+      tool: "androidx.test (AndroidJUnit4 / Compose UI Test / Espresso)"
+    e2e:
+      available: false
+      tool: "—"
+  coverage:
+    available: false
+    command: "—"
+  quality:
+    linter:
+      available: true
+      command: "./gradlew lintDebug"
+    type_checker:
+      available: true
+      command: "./gradlew compileDebugKotlin"
+    formatter:
+      available: false
+      command: "—"
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Verify Android API level compatibility (minSdk 24 to compileSdk 36)
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence or state flow diagrams for complex interactions
+    - Document architecture decisions with rationale
+    - Adhere to Jetpack Compose unidirectional data flow (UDF)
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    guidelines:
+      - Follow existing Jetpack Compose Material 3 patterns
+    tdd: true
+    test_command: "./gradlew testDebugUnitTest"
+  verify:
+    test_command: "./gradlew testDebugUnitTest"
+    build_command: "./gradlew assembleDebug"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
